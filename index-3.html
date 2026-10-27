@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<title>SecureChat: End-to-End Encrypted Messaging</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+ <header class="top">
+  <div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+  <div class="brand">SecureChat <small id="me">End-to-end encrypted</small></div>
+  <button class="ghost" id="bkBtn">Backup</button>
+  <button class="ghost" id="lockBtn" hidden>Lock</button>
+  <button class="ghost" id="outBtn" hidden>Log out</button>
+ </header>
+
+ <div class="gate" id="auth" hidden>
+  <h1>Welcome to SecureChat</h1>
+  <p>Private messaging where only you and the recipient can read your messages. This login is for your account only; your encryption passphrase is separate.</p>
+  <input id="aName" placeholder="Full name (sign up only)" autocomplete="name">
+  <input id="aHandle" placeholder="Username, e.g. rahul_k (sign up only)" autocomplete="username" autocapitalize="none">
+  <input id="aEmail" type="email" placeholder="Email" autocomplete="email">
+  <input id="aPass" type="password" placeholder="Password (8+ characters)" autocomplete="current-password">
+  <div class="row"><button id="aIn">Sign in</button><button id="aUp" class="ghost">Sign up</button></div>
+  <div class="err" id="aErr"></div>
+ </div>
+
+ <div class="gate" id="gate">
+  <h1 id="gTitle">Get started</h1>
+  <p id="gText">Loading…</p>
+  <input id="p1" type="password" placeholder="Passphrase" autocomplete="off" hidden>
+  <div class="meter" id="meter" hidden></div>
+  <input id="p2" type="password" placeholder="Repeat passphrase" autocomplete="off" hidden>
+  <button id="gBtn" hidden>Continue</button>
+  <div class="err" id="gErr"></div>
+ </div>
+
+ <div id="chat" hidden>
+  <aside id="list">
+   <div class="tools"><input id="cSearch" placeholder="Find people by @username" aria-label="Find people by username"></div>
+   <ul id="results"></ul>
+   <h2>Contacts</h2>
+   <ul id="contacts"></ul>
+   <div id="empty" hidden>No contacts yet. Type a @username above to find someone and start a conversation.</div>
+  </aside>
+  <section id="conv">
+   <div class="chead" id="chead" hidden>
+    <button class="ghost" id="back" aria-label="Back">←</button>
+    <div><div id="peerName"></div><div class="fp" id="peerFp"></div><div class="fp" id="peerSn"></div></div>
+    <button class="ghost" id="verifyBtn">Mark as verified</button>
+   </div>
+   <div id="keywarn" hidden>This contact's encryption key has changed. Compare the safety number with them before continuing.<button id="trust">Trust new key</button></div>
+   <div id="tlwarn" hidden>Key history check failed: this key does not match the public transparency log. Do not send messages.</div>
+   <div class="tools" id="mTools" hidden><input id="mSearch" placeholder="Search this chat" aria-label="Search this chat"></div>
+   <div id="msgs"><div class="nosel">Select a contact to start chatting.</div></div>
+   <div class="composer" id="composer" hidden>
+    <select id="ttl" aria-label="Auto-delete"><option value="0">Auto-delete off</option><option value="60000">1 minute</option><option value="3600000">1 hour</option><option value="86400000">1 day</option></select>
+    <textarea id="txt" rows="1" maxlength="2000" placeholder="Write a message"></textarea>
+    <button id="send">Send</button>
+   </div>
+  </section>
+ </div>
+ <div class="foot" id="codeFp"></div>
+</div>
+
+<dialog id="bkDlg">
+ <h2 style="margin-top:0">Backup</h2>
+ <p class="fp" style="font-size:.8rem">This text is locked with your passphrase. Store it somewhere safe. To restore on a new browser, paste it here and tap Restore.</p>
+ <textarea id="bkTxt" spellcheck="false"></textarea>
+ <div class="row" style="margin-top:10px">
+  <button id="bkRestore">Restore</button>
+  <button class="ghost" id="bkClose">Close</button>
+ </div>
+ <div class="err" id="bkErr"></div>
+</dialog>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="backend.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
